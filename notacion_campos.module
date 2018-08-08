@@ -1,0 +1,101 @@
+<?php
+
+use Drupal\taxonomy\Entity\Term;
+
+function notacion_campos_preprocess_field(&$variables, $hook) {
+
+// Terminos de obras
+$configuracion['valores'] = 7;
+
+$configuracion['campo_afectado1'] = 'field_ano_de_publicacion';
+$configuracion['notacion_especial1'] = '949';
+$configuracion['prefijo1'] = 'c. ';
+$configuracion['sufijo1'] = '';
+$configuracion['trunk1'] = '0';
+
+$configuracion['campo_afectado2'] = 'field_ano_de_publicacion';
+$configuracion['notacion_especial2'] = '1017';
+$configuracion['prefijo2'] = '[';
+$configuracion['sufijo2'] = '?]';
+$configuracion['trunk2'] = '0';
+
+$configuracion['campo_afectado3'] = 'field_lugardepublicacion';
+$configuracion['notacion_especial3'] = '1012';
+$configuracion['prefijo3'] = '[';
+$configuracion['sufijo3'] = ']';
+$configuracion['trunk3'] = '0';
+
+// Terminos de autores
+$configuracion['campo_afectado4'] = 'field_lugardenacimiento';
+$configuracion['notacion_especial4'] = '989';
+$configuracion['prefijo4'] = '¿';
+$configuracion['sufijo4'] = '?';
+$configuracion['trunk4'] = '0';
+
+$configuracion['campo_afectado5'] = 'field_ano_de_nacimiento';
+$configuracion['notacion_especial5'] = '1052';
+$configuracion['prefijo5'] = '';
+$configuracion['sufijo5'] = '?';
+$configuracion['trunk5'] = '1';
+
+$configuracion['campo_afectado6'] = 'field_ano_de_muerte';
+$configuracion['notacion_especial6'] = '1053';
+$configuracion['prefijo6'] = '';
+$configuracion['sufijo6'] = '?';
+$configuracion['trunk6'] = '1';
+
+$configuracion['campo_afectado7'] = 'field_ano_de_muerte';
+$configuracion['notacion_especial7'] = '988';
+$configuracion['prefijo7'] = 'c.';
+$configuracion['sufijo7'] = '';
+$configuracion['trunk7'] = '0';
+
+    if ($variables['element']['#object']->hasField('field_caracteristicaespecial')) {
+
+        $CaracteristicasEspeciales = $variables['element']['#object']->get('field_caracteristicaespecial')->getValue();
+
+        if (!empty($CaracteristicasEspeciales)) {
+
+            for ($i = 1; $i <= $configuracion['valores']; $i++) {
+                $indiceAux=$configuracion['notacion_especial'.$i];
+                $confAux[$indiceAux]['campo'] = $configuracion['campo_afectado'.$i];
+                $confAux[$indiceAux]['prefijo'] = $configuracion['prefijo'.$i];
+                $confAux[$indiceAux]['sufijo'] = $configuracion['sufijo'.$i];
+                $confAux[$indiceAux]['trunk'] = $configuracion['trunk'.$i];
+            }
+
+            foreach ($CaracteristicasEspeciales as $cadaTid_especiales) {
+  
+                $tidValor = $cadaTid_especiales['target_id'];
+            
+                if ($confAux[$tidValor]['campo'] == $variables['element']['#field_name']) {
+                    
+                        $campoAfectado = $confAux[$tidValor]['campo'];
+                        $prefijo = $confAux[$tidValor]['prefijo'];
+                        $sufijo = $confAux[$tidValor]['sufijo'];
+                        $trunk = $confAux[$tidValor]['trunk'];
+                        
+                        $campoValor = $variables['element']['#object']->get($campoAfectado)->getValue();
+                        $campoTipo = $variables['element']['#object']->get($campoAfectado)->getFieldDefinition()->getType();
+
+                        switch ($campoTipo) {
+                            case 'integer':
+                            $campo=$campoValor['0']['value'];
+                        break;
+                            case 'entity_reference':
+                            $term = Term::load($campoValor['0']['target_id']);
+                            $campo= $term->getName();
+                        break;
+                        }
+
+                        if ($trunk > 0) {$campo = substr($campo, 0, -$trunk);}
+                        $campo = $prefijo.$campo.$sufijo;
+                        $variables['items'] = array ('0' => array ('content' => $campo, 'attributes' => '')); 
+                }
+            }
+        }
+
+
+    }
+
+}

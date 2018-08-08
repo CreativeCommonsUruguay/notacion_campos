@@ -1,0 +1,25 @@
+{
+    "name": "drupal/notacion_campos",
+    "description": "Ajusta la visualización de los campos ante situaciones especiales como circa, valores dudosos o no presentes en la obras, etc. siguiendo normas bibliotecológicas",
+    "type": "drupal-module",
+    "homepage": "https://github.com/CreativeCommonsUruguay/notacion_campos",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Rodrigo Barbano",
+            "email": "rbarbano@vera.com.uy",
+            "role": "Maintainer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "support": {
+       "issues": "https://github.com/CreativeCommonsUruguay/notacion_campos/issues",
+       "source": "https://github.com/CreativeCommonsUruguay/notacion_campos"
+     },
+     "repositories": {
+         "notacion_campos": {
+             "type": "vcs",
+             "url": "https://github.com/CreativeCommonsUruguay/notacion_campos"
+         }
+       }
+}

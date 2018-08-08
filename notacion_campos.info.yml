@@ -1,0 +1,6 @@
+name: Notacion campos
+description: Ajusta la visualización de los campos ante situaciones especiales como circa, valores dudosos o no presentes en la obras, etc. siguiendo normas bibliotecológicas.
+package: AUTORES
+
+type: module
+core: 8.x
